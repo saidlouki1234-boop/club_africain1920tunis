@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.club_africain1920tunis.abd"
+    namespace = "com.club_africain1920tunis.abdallah"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.club_africain1920tunis.abd"
+        applicationId = "com.club_africain1920tunis.abdallah"
         minSdk = 24
         targetSdk = 33
         versionCode = flutterVersionCode.toInteger()
