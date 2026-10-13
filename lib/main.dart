@@ -1,763 +1,248 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>النادي الإفريقي | Lefri9i</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #c8102e, #8b0000);
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 2rem; margin-bottom: 5px; }
+    header p { opacity: 0.9; }
+    nav {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+    nav a:hover { background: #c8102e; }
+    .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+    section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    h2 {
+      color: #c8102e;
+      border-bottom: 3px solid #c8102e;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+    .news-item, .match-item {
+      border-right: 4px solid #c8102e;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+      background: #fff8f8;
+      border-radius: 0 8px 8px 0;
+    }
+    .match-item { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .match-date { font-weight: bold; color: #c8102e; min-width: 120px; }
+    .prediction-form input, .prediction-form select, .prediction-form button {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 300px;
+    }
+    .prediction-form button {
+      background: #c8102e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .prediction-form button:hover { background: #a00; }
+    .social {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .social a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #c8102e;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .social a:hover { transform: scale(1.05); background: #8b0000; }
+    .tiktok { background: #000 !important; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .match-item { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>النادي الإفريقي</h1>
+    <p>منذ 1920 • الأحمر والأبيض • Lefri9i</p>
+  </header>
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const TaskMasterApp());
-}
+  <nav>
+    <a href="#news">الأخبار</a>
+    <a href="#matches">المباريات</a>
+    <a href="#predictions">التوقعات</a>
+    <a href="#social">وسائل التواصل</a>
+  </nav>
 
-class AppTheme {
-  static const Color background = Color(0xFF0D1117);
-  static const Color surface = Color(0xFF161B22);
-  static const Color surfaceAlt = Color(0xFF21262D);
-  static const Color border = Color(0xFF30363D);
-  static const Color primary = Color(0xFF1F6FEB);
-  static const Color primaryLight = Color(0xFF58A6FF);
-  static const Color success = Color(0xFF2EA043);
-  static const Color danger = Color(0xFFCF222E);
-  static const Color warning = Color(0xFFD29922);
-  static const Color textPrimary = Color(0xFFE6EDF3);
-  static const Color textMuted = Color(0xFF8B949E);
+  <div class="container">
+    <!-- الأخبار -->
+    <section id="news">
+      <h2>آخر الأخبار</h2>
+      <div class="news-item">
+        <strong>تحديث رسمي:</strong> الموقع الرسمي الجديد للنادي قيد الإطلاق قريباً على clubafricain.com
+      </div>
+      <div class="news-item">
+        <strong>كرة القدم:</strong> الفريق يستعد لمواجهة قوية في الدوري التونسي ودوري أبطال أفريقيا.
+      </div>
+      <div class="news-item">
+        <strong>الجماهير:</strong> حافظوا على روح "الإفريقي تعيش" وادعموا الفريق في كل الملاعب.
+      </div>
+      <p style="margin-top:15px; color:#666; font-size:0.9rem;">
+        * يمكنك تحديث الأخبار يدوياً أو ربطها بمصدر RSS لاحقاً.
+      </p>
+    </section>
 
-  static ThemeData get dark => ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: background,
-        colorScheme: const ColorScheme.dark(
-          primary: primary,
-          secondary: primaryLight,
-          surface: surface,
-          error: danger,
-          onPrimary: Colors.white,
-          onSurface: textPrimary,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: background,
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            color: textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: primary,
-          foregroundColor: Colors.white,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: surfaceAlt,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: border),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: border),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: primaryLight, width: 1.5),
-          ),
-        ),
-      );
-}
+    <!-- المباريات -->
+    <section id="matches">
+      <h2>مواعيد المباريات القادمة</h2>
+      <div class="match-item">
+        <span class="match-date">10 أكتوبر 2026</span>
+        <span>US بنقردان × النادي الإفريقي</span>
+        <span>الدوري التونسي</span>
+      </div>
+      <div class="match-item">
+        <span class="match-date">17 أكتوبر 2026</span>
+        <span>تي بي مازيمبي × النادي الإفريقي</span>
+        <span>دوري أبطال أفريقيا</span>
+      </div>
+      <div class="match-item">
+        <span class="match-date">حوالي 25 أكتوبر</span>
+        <span>النادي الإفريقي × تي بي مازيمبي (إياب)</span>
+        <span>دوري أبطال أفريقيا</span>
+      </div>
+      <div class="match-item">
+        <span class="match-date">نوفمبر 2026</span>
+        <span>النادي الإفريقي × الترجي الرياضي</span>
+        <span>الدوري التونسي (ديربي)</span>
+      </div>
+      <p style="margin-top:15px; color:#666; font-size:0.9rem;">
+        * المواعيد تقريبية حسب المصادر العامة (Sofascore وغيرها). تحقق دائماً من المصادر الرسمية.
+      </p>
+    </section>
 
-class Task {
-  final String id;
-  String title;
-  bool done;
-  final DateTime createdAt;
+    <!-- التوقعات -->
+    <section id="predictions">
+      <h2>توقعاتك للنتيجة</h2>
+      <form class="prediction-form" onsubmit="savePrediction(event)">
+        <label>اختر المباراة:</label>
+        <select id="matchSelect" required>
+          <option value="">-- اختر --</option>
+          <option value="بنقردان">US بنقردان × الإفريقي</option>
+          <option value="مازيمبي">مازيمبي × الإفريقي</option>
+          <option value="الترجي">الإفريقي × الترجي</option>
+        </select>
+        <br>
+        <label>نتيجتك المتوقعة (مثال: 2-1):</label>
+        <input type="text" id="scoreInput" placeholder="2-1" required>
+        <br>
+        <button type="submit">احفظ التوقعات</button>
+      </form>
+      <div id="savedPredictions" style="margin-top:15px;"></div>
+    </section>
 
-  Task({
-    required this.id,
-    required this.title,
-    this.done = false,
-    required this.createdAt,
-  });
+    <!-- وسائل التواصل -->
+    <section id="social">
+      <h2>حسابات النادي الرسمية / المفضلة</h2>
+      <div class="social">
+        <a href="https://www.tiktok.com/@club_africain1920tunis" target="_blank" class="tiktok">
+          تيك توك
+        </a>
+        <a href="https://instagram.com/club_africain1920tunis" target="_blank">
+          إنستغرام
+        </a>
+      </div>
+      <p style="text-align:center; margin-top:15px; color:#666;">
+        الحسابات اللي طلبتها مضافة مباشرة. يمكنك أيضاً متابعة الحساب الرسمي الرئيسي: @clubafricain__officiel
+      </p>
+    </section>
+  </div>
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'done': done,
-        'createdAt': createdAt.toIso8601String(),
-      };
+  <footer>
+    تطبيق غير رسمي مشجع للنادي الإفريقي • 1920 - حتى الممات<br>
+    الألوان: الأحمر والأبيض
+  </footer>
 
-  factory Task.fromJson(Map<String, dynamic> json) => Task(
-        id: json['id'] as String,
-        title: json['title'] as String,
-        done: json['done'] as bool? ?? false,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-      );
-}
+  <script>
+    function savePrediction(e) {
+      e.preventDefault();
+      const match = document.getElementById('matchSelect').value;
+      const score = document.getElementById('scoreInput').value;
+      if (!match || !score) return;
 
-class TaskMasterApp extends StatelessWidget {
-  const TaskMasterApp({super.key});
+      let preds = JSON.parse(localStorage.getItem('caPredictions') || '[]');
+      preds.unshift({ match, score, date: new Date().toLocaleString('ar-TN') });
+      if (preds.length > 10) preds = preds.slice(0, 10);
+      localStorage.setItem('caPredictions', JSON.stringify(preds));
+      showPredictions();
+      document.getElementById('scoreInput').value = '';
+      alert('تم حفظ توقعاتك!');
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'club_africain1920tunis',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
-      home: const TaskHomePage(),
-    );
-  }
-}
-
-enum TaskFilter { all, active, completed }
-
-class TaskHomePage extends StatefulWidget {
-  const TaskHomePage({super.key});
-
-  @override
-  State<TaskHomePage> createState() => _TaskHomePageState();
-}
-
-class _TaskHomePageState extends State<TaskHomePage>
-    with SingleTickerProviderStateMixin {
-  static const String _storageKey = 'klencod_tasks_v1';
-
-  final List<Task> _tasks = [];
-  final TextEditingController _searchController = TextEditingController();
-  TaskFilter _filter = TaskFilter.all;
-  String _searchQuery = '';
-  bool _loading = true;
-  late AnimationController _fadeController;
-
-  @override
-  void initState() {
-    super.initState();
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _loadTasks();
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadTasks() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final data = prefs.getString(_storageKey);
-      if (data != null && data.isNotEmpty) {
-        final list = jsonDecode(data) as List<dynamic>;
-        _tasks.clear();
-        _tasks.addAll(list.map((e) => Task.fromJson(e as Map<String, dynamic>)));
+    function showPredictions() {
+      const preds = JSON.parse(localStorage.getItem('caPredictions') || '[]');
+      const container = document.getElementById('savedPredictions');
+      if (preds.length === 0) {
+        container.innerHTML = '<p style="color:#888;">لا توجد توقعات محفوظة بعد.</p>';
+        return;
       }
-    } catch (_) {}
-    setState(() => _loading = false);
-    _fadeController.forward();
-  }
-
-  Future<void> _saveTasks() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final data = jsonEncode(_tasks.map((t) => t.toJson()).toList());
-      await prefs.setString(_storageKey, data);
-    } catch (_) {}
-  }
-
-  void _addTask(String title) {
-    final trimmed = title.trim();
-    if (trimmed.isEmpty) return;
-    setState(() {
-      _tasks.insert(
-        0,
-        Task(
-          id: DateTime.now().microsecondsSinceEpoch.toString(),
-          title: trimmed,
-          createdAt: DateTime.now(),
-        ),
-      );
-    });
-    _saveTasks();
-    HapticFeedback.lightImpact();
-    _showSnack('تمت إضافة المهمة', success: true);
-  }
-
-  void _toggleTask(Task task) {
-    setState(() => task.done = !task.done);
-    _saveTasks();
-    HapticFeedback.selectionClick();
-  }
-
-  void _deleteTask(Task task) {
-    final index = _tasks.indexOf(task);
-    if (index == -1) return;
-    setState(() => _tasks.removeAt(index));
-    _saveTasks();
-    _showSnack(
-      'تم حذف المهمة',
-      actionLabel: 'تراجع',
-      onAction: () {
-        setState(() => _tasks.insert(index, task));
-        _saveTasks();
-      },
-    );
-  }
-
-  void _clearCompleted() {
-    final completed = _tasks.where((t) => t.done).toList();
-    if (completed.isEmpty) {
-      _showSnack('لا توجد مهام مكتملة');
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (ctx) => _buildConfirmDialog(
-        ctx,
-        title: 'حذف المهام المكتملة',
-        message: 'سيتم حذف ${completed.length} مهمة مكتملة. لا يمكن التراجع.',
-        onConfirm: () {
-          setState(() => _tasks.removeWhere((t) => t.done));
-          _saveTasks();
-          Navigator.pop(ctx);
-          _showSnack('تم حذف ${completed.length} مهمة', success: true);
-        },
-      ),
-    );
-  }
-
-  void _showSnack(String message,
-      {String? actionLabel, VoidCallback? onAction, bool success = false}) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              success ? Icons.check_circle_rounded : Icons.info_outline_rounded,
-              color: success ? AppTheme.success : AppTheme.textPrimary,
-              size: 20,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(color: AppTheme.textPrimary),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.surfaceAlt,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-        action: actionLabel != null
-            ? SnackBarAction(
-                label: actionLabel,
-                textColor: AppTheme.primaryLight,
-                onPressed: onAction ?? () {},
-              )
-            : null,
-      ),
-    );
-  }
-
-  Widget _buildConfirmDialog(
-    BuildContext ctx, {
-    required String title,
-    required String message,
-    required VoidCallback onConfirm,
-  }) {
-    return AlertDialog(
-      backgroundColor: AppTheme.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      title: Text(title, style: const TextStyle(color: AppTheme.textPrimary)),
-      content: Text(message, style: const TextStyle(color: AppTheme.textMuted)),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: const Text('إلغاء',
-              style: TextStyle(color: AppTheme.textMuted)),
-        ),
-        TextButton(
-          onPressed: onConfirm,
-          child: const Text('تأكيد',
-              style: TextStyle(
-                  color: AppTheme.danger, fontWeight: FontWeight.bold)),
-        ),
-      ],
-    );
-  }
-
-  void _openAddDialog() {
-    final controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        title: Row(
-          children: const [
-            Icon(Icons.add_task_rounded, color: AppTheme.primaryLight),
-            SizedBox(width: 10),
-            Text('مهمة جديدة',
-                style: TextStyle(color: AppTheme.textPrimary)),
-          ],
-        ),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          textInputAction: TextInputAction.done,
-          onSubmitted: (v) {
-            _addTask(v);
-            Navigator.pop(ctx);
-          },
-          decoration: const InputDecoration(
-            hintText: 'اكتب المهمة...',
-            prefixIcon: Icon(Icons.edit_rounded),
-          ),
-          style: const TextStyle(color: AppTheme.textPrimary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء',
-                style: TextStyle(color: AppTheme.textMuted)),
-          ),
-          FilledButton(
-            onPressed: () {
-              _addTask(controller.text);
-              Navigator.pop(ctx);
-            },
-            style: FilledButton.styleFrom(backgroundColor: AppTheme.primary),
-            child: const Text('إضافة'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Task> get _visibleTasks {
-    Iterable<Task> result = _tasks;
-    if (_filter == TaskFilter.active) {
-      result = result.where((t) => !t.done);
-    } else if (_filter == TaskFilter.completed) {
-      result = result.where((t) => t.done);
-    }
-    if (_searchQuery.isNotEmpty) {
-      final q = _searchQuery.toLowerCase();
-      result = result.where((t) => t.title.toLowerCase().contains(q));
-    }
-    return result.toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(color: AppTheme.primaryLight),
-        ),
-      );
+      container.innerHTML = '<h3>توقعاتك السابقة:</h3>' + preds.map(p => 
+        `<div class="news-item">\( {p.match}: <strong> \){p.score}</strong> <small>(${p.date})</small></div>`
+      ).join('');
     }
 
-    final visible = _visibleTasks;
-    final total = _tasks.length;
-    final completed = _tasks.where((t) => t.done).length;
-    final active = total - completed;
-    final progress = total == 0 ? 0.0 : completed / total;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('club_africain1920tunis'),
-        actions: [
-          if (completed > 0)
-            IconButton(
-              tooltip: 'حذف المكتملة',
-              icon: const Icon(Icons.delete_sweep_rounded),
-              onPressed: _clearCompleted,
-            ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openAddDialog,
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('مهمة جديدة',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-      ),
-      body: Column(
-        children: [
-          _buildHeader(total, completed, active, progress),
-          _buildSearchBar(),
-          _buildFilters(total, active, completed),
-          Expanded(
-            child: visible.isEmpty
-                ? _buildEmptyState()
-                : _buildTaskList(visible),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader(int total, int completed, int active, double progress) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1F6FEB), Color(0xFF0D419D)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.primary.withOpacity(0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.task_alt_rounded,
-                    color: Colors.white, size: 28),
-                const SizedBox(width: 10),
-                Text(
-                  total == 0 ? 'لا توجد مهام بعد' : 'مهامك',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _statChip('الإجمالي', total, Colors.white),
-                _statChip('نشطة', active, AppTheme.warning),
-                _statChip('مكتملة', completed, AppTheme.success),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: progress),
-                duration: const Duration(milliseconds: 600),
-                builder: (_, value, __) => LinearProgressIndicator(
-                  value: value,
-                  minHeight: 8,
-                  backgroundColor: Colors.white24,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              '${(progress * 100).toStringAsFixed(0)}% إنجاز',
-              style: const TextStyle(color: Colors.white70, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _statChip(String label, int value, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '$value',
-            style: TextStyle(
-              color: color,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white70, fontSize: 11),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (v) => setState(() => _searchQuery = v),
-        style: const TextStyle(color: AppTheme.textPrimary),
-        decoration: InputDecoration(
-          hintText: 'بحث في المهام...',
-          prefixIcon: const Icon(Icons.search_rounded,
-              color: AppTheme.textMuted),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear_rounded,
-                      color: AppTheme.textMuted),
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() => _searchQuery = '');
-                  },
-                )
-              : null,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFilters(int total, int active, int completed) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Row(
-        children: [
-          _filterChip('الكل', TaskFilter.all, total),
-          const SizedBox(width: 8),
-          _filterChip('نشطة', TaskFilter.active, active),
-          const SizedBox(width: 8),
-          _filterChip('مكتملة', TaskFilter.completed, completed),
-        ],
-      ),
-    );
-  }
-
-  Widget _filterChip(String label, TaskFilter filter, int count) {
-    final selected = _filter == filter;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _filter = filter),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: selected ? AppTheme.primary : AppTheme.surfaceAlt,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: selected ? AppTheme.primaryLight : AppTheme.border,
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                '$count',
-                style: TextStyle(
-                  color: selected ? Colors.white : AppTheme.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                label,
-                style: TextStyle(
-                  color: selected ? Colors.white70 : AppTheme.textMuted,
-                  fontSize: 11,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTaskList(List<Task> visible) {
-    return FadeTransition(
-      opacity: _fadeController,
-      child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 100),
-        itemCount: visible.length,
-        itemBuilder: (context, index) {
-          final task = visible[index];
-          return _buildTaskItem(task);
-        },
-      ),
-    );
-  }
-
-  Widget _buildTaskItem(Task task) {
-    return Dismissible(
-      key: ValueKey(task.id),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-          color: AppTheme.danger,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        alignment: Alignment.centerRight,
-        child: const Icon(Icons.delete_rounded,
-            color: Colors.white, size: 26),
-      ),
-      confirmDismiss: (_) async {
-        _deleteTask(task);
-        return false;
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          color: AppTheme.surface,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: task.done
-                ? AppTheme.success.withOpacity(0.4)
-                : AppTheme.border,
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(14),
-            onTap: () => _toggleTask(task),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      color: task.done
-                          ? AppTheme.success
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: task.done
-                            ? AppTheme.success
-                            : AppTheme.textMuted,
-                        width: 2,
-                      ),
-                    ),
-                    child: task.done
-                        ? const Icon(Icons.check_rounded,
-                            color: Colors.white, size: 18)
-                        : null,
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          task.title,
-                          style: TextStyle(
-                            color: task.done
-                                ? AppTheme.textMuted
-                                : AppTheme.textPrimary,
-                            fontSize: 15,
-                            decoration: task.done
-                                ? TextDecoration.lineThrough
-                                : null,
-                            decorationColor: AppTheme.textMuted,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _formatDate(task.createdAt),
-                          style: const TextStyle(
-                            color: AppTheme.textMuted,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: 'حذف',
-                    icon: const Icon(Icons.delete_outline_rounded,
-                        color: AppTheme.textMuted),
-                    onPressed: () => _deleteTask(task),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-    if (diff.inMinutes < 1) return 'الآن';
-    if (diff.inHours < 1) return 'منذ ${diff.inMinutes} دقيقة';
-    if (diff.inDays < 1) return 'منذ ${diff.inHours} ساعة';
-    if (diff.inDays == 1) return 'أمس';
-    return 'منذ ${diff.inDays} يوم';
-  }
-
-  Widget _buildEmptyState() {
-    final String message;
-    final IconData icon;
-    if (_searchQuery.isNotEmpty) {
-      message = 'لا توجد نتائج للبحث';
-      icon = Icons.search_off_rounded;
-    } else if (_filter == TaskFilter.completed) {
-      message = 'لا توجد مهام مكتملة بعد';
-      icon = Icons.check_circle_outline_rounded;
-    } else if (_filter == TaskFilter.active) {
-      message = 'كل المهام مكتملة!';
-      icon = Icons.celebration_rounded;
-    } else {
-      message = 'ابدأ بإضافة مهمتك الأولى';
-      icon = Icons.playlist_add_rounded;
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceAlt,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppTheme.border),
-            ),
-            child: Icon(icon, size: 56, color: AppTheme.primaryLight),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            message,
-            style: const TextStyle(
-              color: AppTheme.textMuted,
-              fontSize: 15,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'استخدم الزر أدناه للبدء',
-            style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-}
+    // عرض التوقعات عند التحميل
+    showPredictions();
+  </script>
+</body>
+</html>
